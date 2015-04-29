@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -35,9 +36,17 @@ namespace CatProject
                 catCountDown.Enabled = false;
                 if (saveFileCatDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
                 {
-                    paint.bitmap.Save(saveFileCatDialog.FileName);
+                    string pattern = @"^[a-z][A-Z]+[.]{1}[bmp]*[png]*$";
+                    Regex regexp = new Regex(pattern);
+                    if (regexp.IsMatch(saveFileCatDialog.FileName))
+                    {
+                        paint.bitmap.Save(saveFileCatDialog.FileName);
+                        MessageBox.Show(String.Format("Нарисованный тобой файл сохранен в указанной директории под именем: {0}", saveFileCatDialog.FileName));
+
+                    }
+                    else
+                        MessageBox.Show(String.Format("Формат файла указан неверно: {0}. Сорян, может дизайнер из тебя норм, но вот ОИС прогуливал", saveFileCatDialog.FileName));
                 }
-                MessageBox.Show(String.Format("Нарисованный тобой файл сохранен под именем: {0}",saveFileCatDialog.FileName));
                 return;
             }
             counter++;            
